@@ -288,9 +288,9 @@ else:
 # Section 5: Pie Charts for Family Status of Users
 st.header(f'Pie Charts Showing Family Status of Users in {app1} and {app2}')
 
-if 'FamilyStatus' in df.columns and app1_cleaned in df.columns and app2_cleaned in df.columns:
+if 'FamilyStatus' in df.columns and 'Facebook' in df.columns and 'Instagram' in df.columns:
     # Filter dataframe for the selected apps
-    family_status_columns = ['FamilyStatus', app1_cleaned, app2_cleaned]
+    family_status_columns = ['FamilyStatus', 'Facebook', 'Instagram']
     df_family_status = df[family_status_columns]
 
     # Filter out "Other" category
@@ -304,19 +304,19 @@ if 'FamilyStatus' in df.columns and app1_cleaned in df.columns and app2_cleaned 
         # Sort data from highest to lowest
         data = data.sort_values(ascending=False)
         fig, ax = plt.subplots()
-        wedges, texts, autotexts = ax.pie(data, labels=data.index, autopct='%1.1f%%', startangle=90, counterclock=False, colors=custom_colors)
+        wedges, texts, autotexts = ax.pie(data, labels=data.index, autopct=lambda p: f'{p:.1f}%', startangle=90, counterclock=False, colors=custom_colors)
         ax.axis('equal')  # Equal aspect ratio ensures that pie is drawn as a circle.
         plt.setp(autotexts, size=10, weight="bold")
         ax.set_title(title)
         return fig
 
-    # Pie chart for the first app
-    family_status_app1 = df_family_status[df_family_status[app1_cleaned] == 1]['FamilyStatus'].value_counts()
-    fig_pie1 = create_sorted_pie_chart(family_status_app1, f'{app1_cleaned}')
+    # Pie chart for Facebook
+    family_status_facebook = df_family_status[df_family_status['Facebook'] == 1]['FamilyStatus'].value_counts()
+    fig_pie1 = create_sorted_pie_chart(family_status_facebook, 'Facebook')
 
-    # Pie chart for the second app
-    family_status_app2 = df_family_status[df_family_status[app2_cleaned] == 1]['FamilyStatus'].value_counts()
-    fig_pie2 = create_sorted_pie_chart(family_status_app2, f'{app2_cleaned}')
+    # Pie chart for Instagram
+    family_status_instagram = df_family_status[df_family_status['Instagram'] == 1]['FamilyStatus'].value_counts()
+    fig_pie2 = create_sorted_pie_chart(family_status_instagram, 'Instagram')
 
     # Display the pie charts side by side
     col1, col2 = st.columns(2)
