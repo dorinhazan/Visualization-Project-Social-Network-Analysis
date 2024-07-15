@@ -33,7 +33,7 @@ for col in columns_to_rename:
 st.title('App Usage Analysis')
 
 # Select category for analysis
-category = st.selectbox('Select a Category', ['Age_group', 'Gender', 'Income', 'App Usage Frequency', 'Religion', 'Area'])
+category = st.selectbox('Select a Category', ['Age_group', 'Gender', 'Income', 'App Usage Frequency'])
 
 # Extract relevant columns for the selected category
 if category == 'Age_group':
@@ -41,7 +41,7 @@ if category == 'Age_group':
     df[category] = pd.Categorical(df[category], categories=category_order, ordered=True)
 elif category == 'App Usage Frequency':
     frequency_columns = [col for col in df.columns if col.startswith('Frequency-')]
-    df_long_freq = pd.melt(df, id_vars=['Gender', 'Income', 'Religion', 'Area'], value_vars=frequency_columns,
+    df_long_freq = pd.melt(df, id_vars=['Gender', 'Income'], value_vars=frequency_columns,
                            var_name='AppName', value_name='Frequency')
     df_long_freq['AppName'] = df_long_freq['AppName'].str.replace('Frequency-', '')
     main_apps = ['Facebook', 'YouTube', 'Instagram', 'TikTok', 'Twitter', 'LinkedIn', 'WhatsApp']
@@ -50,9 +50,10 @@ elif category == 'App Usage Frequency':
     df = df_long_freq
     category_order = ['Not Using', 'Less often', 'Several times a month', 'Several times a week', 'Daily']
     df[category] = pd.Categorical(df[category], categories=category_order, ordered=True)
-elif category == 'Religion' or category == 'Area':
-    category_order = df[category].unique()
-else:
+elif category == 'Income':
+    category_order = ['Way below Average', 'below Average', 'Similar to Average', 'Above Average', 'Way Above Average']
+    df[category] = pd.Categorical(df[category], categories=category_order, ordered=True)
+else:  # Gender
     category_order = df[category].unique()
 
 # Transform the dataset to a long format
@@ -69,6 +70,7 @@ df_long['AppName'] = df_long['AppName'].str.replace('B-', '')
 # Filter to include only main applications
 main_apps = ['Facebook', 'YouTube', 'Instagram', 'TikTok', 'Twitter', 'LinkedIn', 'WhatsApp']
 df_long = df_long[df_long['AppName'].isin(main_apps)]
+
 
 # Calculate the count of users for each app and category
 if category != 'App Usage Frequency':
@@ -134,48 +136,29 @@ sequential_palette = {
 }
 
 income_palette = {
-    'Low': '#edf8e9',  # Light green
-    'Below Average': '#bae4b3',  # Light-medium green
-    'Average': '#74c476',  # Medium green
+    'Way below Average': '#edf8e9',  # Light green
+    'below Average': '#bae4b3',  # Light-medium green
+    'Similar to Average': '#74c476',  # Medium green
     'Above Average': '#31a354',  # Dark-medium green
-    'High': '#006d2c'  # Dark green
+    'Way Above Average': '#006d2c'  # Dark green
 }
 
 gender_palette = {
     'Male': '#1f77b4',  # Blue
-    'Female': '#ff7f0e'  # Orange
-}
-
-religion_palette = {
-    'Jewish - Traditional': '#e41a1c',  # Red
-    'Jewish - Secular': '#377eb8',  # Blue
-    'Jewish - National Religious': '#4daf4a',  # Green
-    'Jewish - Orthodox': '#984ea3',  # Purple
-    'Muslim': '#ff7f00'  # Orange
-}
-
-area_palette = {
-    'Jerusalem': '#8dd3c7',  # Teal
-    'Center': '#ffffb3',  # Yellow
-    'Tel Aviv': '#bebada',  # Purple
-    'North': '#fb8072',  # Coral
-    'Haifa': '#80b1d3',  # Sky blue
-    'Yehoda and Shomron': '#fdb462',  # Orange
-    'South': '#b3de69',  # Light green
+    'Female': '#ff7f0e'  # Pink
 }
 
 # Select appropriate color palette based on the category
 color_discrete_map = diverging_palette if category == 'App Usage Frequency' else (
     sequential_palette if category == 'Age_group' else (
     income_palette if category == 'Income' else (
-    gender_palette if category == 'Gender' else (
-    religion_palette if category == 'Religion' else (
-    area_palette if category == 'Area' else None)))))
+    gender_palette if category == 'Gender' else None)))
 
 # Plot the bar chart using Plotly
 fig = px.bar(df_final,
              x='AppName', y='Percentage', color=category,
-             hover_data={'AppName': False, 'Count': True, 'Total': True, 'Percentage': ':.2f',
+             hover_data={'AppName': False, 'Count': True,
+                         'Total': True, 'Percentage': ':.2f',
                          'TotalUserBase': True, 'Proportion': ':.2f'},
              color_discrete_map=color_discrete_map)
 
@@ -196,6 +179,81 @@ fig.update_layout(
 # Show the plot in Streamlit
 st.plotly_chart(fig, use_container_width=True)
 
+
+# Streamlit app
+st.title('App Usage Analysis and Visualizations')
+
+# Section 1: App Selection
+st.header('Select Apps for Analysis')
+
+# Dropdowns for selecting two apps
+app_options = ['Facebook', 'Instagram', 'YouTube', 'Twitter']
+# Place dropdowns for selecting apps side by side
+col1, col2 = st.columns(2)
+
+with col1:
+    app1 = st.selectbox('Select first app', app_options)
+
+with col2:
+    # Filter out the first app from the options for the second dropdown
+    app_options_filtered = [app for app in app_options if app != app1]
+    app2 = st.selectbox('Select second app', app_options_filtered)
+
+# Filter dataframe for selected apps
+selected_apps = [f'Frequency-{app1}-num', f'Frequency-{app2}-num']
+
+# Section 2: Scatter Plots
+st.header(f'Scatter Plots of Age vs Income with Frequency for {app1} and {app2}')
+
+# Custom color scale from light to dark
+custom_color_scale = [
+    [0, "yellow"],
+    [1, "darkred"]
+]
+
+# Scatter plot for the first app
+fig_app1 = px.scatter(
+    df,
+    x='Age_group-num',
+    y='Income-num',
+    color=selected_apps[0],
+    title=f'{app1} Usage',
+    labels={selected_apps[0]: f'{app1} Frequency'},
+    color_continuous_scale=custom_color_scale
+)
+
+fig_app1.update_layout(
+    autosize=False,
+    width=700,  # Adjust the width as needed
+    height=600  # Adjust the height as needed
+)
+
+# Scatter plot for the second app
+fig_app2 = px.scatter(
+    df,
+    x='Age_group-num',
+    y='Income-num',
+    color=selected_apps[1],
+    title=f'{app2} Usage',
+    labels={selected_apps[1]: f'{app2} Frequency'},
+    color_continuous_scale=custom_color_scale
+)
+
+fig_app2.update_layout(
+    autosize=False,
+    width=700,  # Adjust the width as needed
+    height=600  # Adjust the height as needed
+)
+
+col1, col2 = st.columns([1, 1])
+
+with col1:
+    st.plotly_chart(fig_app1, use_container_width=True)
+
+with col2:
+    st.plotly_chart(fig_app2, use_container_width=True)
+
+
 # Section 4: Heatmaps for App Usage by Religion
 st.header('Heatmaps for App Usage by Religion')
 
@@ -207,22 +265,61 @@ binary_columns = [col for col in binary_columns if col.endswith((app1, app2))]
 if len(binary_columns) < 2:
     st.error(f"Not enough binary columns found for the selected apps: {app1} and {app2}")
 else:
-    # Plot heatmaps for each selected app
-    col1, col2 = st.columns(2)
+    # Clean column names for heatmap
+    app1_cleaned = app1.replace('B-', '')
+    app2_cleaned = app2.replace('B-', '')
+
+    df.rename(columns={binary_columns[0]: app1_cleaned, binary_columns[1]: app2_cleaned}, inplace=True)
 
     # Heatmap for the first app
-    heatmap_data_app1 = pd.crosstab(df['Religion'], df[binary_columns[0]])
+    heatmap_data_app1 = pd.crosstab(df['Religion'], df[app1_cleaned])
+    heatmap_data_app1.columns = ['Not Using', 'Using']
     fig1, ax1 = plt.subplots(figsize=(8, 6))
-    sns.heatmap(heatmap_data_app1, annot=True, cmap='coolwarm', ax=ax1)
-    ax1.set_title(f'Heatmap for {app1} Usage by Religion')
+    sns.heatmap(heatmap_data_app1, annot=True, fmt='d', cmap='Blues', ax=ax1)
+    ax1.set_title(f'Heatmap for {app1_cleaned} Usage by Religion')
 
     # Heatmap for the second app
-    heatmap_data_app2 = pd.crosstab(df['Religion'], df[binary_columns[1]])
+    heatmap_data_app2 = pd.crosstab(df['Religion'], df[app2_cleaned])
+    heatmap_data_app2.columns = ['Not Using', 'Using']
     fig2, ax2 = plt.subplots(figsize=(8, 6))
-    sns.heatmap(heatmap_data_app2, annot=True, cmap='coolwarm', ax=ax2)
-    ax2.set_title(f'Heatmap for {app2} Usage by Religion')
+    sns.heatmap(heatmap_data_app2, annot=True, fmt='d', cmap='Blues', ax=ax2)
+    ax2.set_title(f'Heatmap for {app2_cleaned} Usage by Religion')
 
+    col1, col2 = st.columns(2)
     with col1:
         st.pyplot(fig1)
     with col2:
         st.pyplot(fig2)
+# Section 5: Pie Charts for Family Status of Users
+st.header('Pie Charts for Family Status of Users')
+
+# Ensure the columns exist
+if 'FamilyStatus' in df.columns and app1_cleaned in df.columns and app2_cleaned in df.columns:
+    # Filter dataframe for the selected apps
+    family_status_columns = ['FamilyStatus', app1_cleaned, app2_cleaned]
+    df_family_status = df[family_status_columns]
+
+    # Filter out "Other" category
+    df_family_status = df_family_status[df_family_status['FamilyStatus'] != 'Other']
+
+    # Define custom colors
+    custom_colors = ["#FFCD00", "#008FC4", "#1AB394", "#FFA000", "#FF3D00"]
+
+    # Pie chart for the first app
+    family_status_app1 = df_family_status[df_family_status[app1_cleaned] == 1]['FamilyStatus'].value_counts().sort_values(ascending=False)
+    fig_pie1 = px.pie(family_status_app1, names=family_status_app1.index, values=family_status_app1.values,
+                      title=f'Family Status of {app1_cleaned} Users', color_discrete_sequence=custom_colors)
+    fig_pie1.update_traces(sort=False, rotation=90)
+
+    # Pie chart for the second app
+    family_status_app2 = df_family_status[df_family_status[app2_cleaned] == 1]['FamilyStatus'].value_counts().sort_values(ascending=False)
+    fig_pie2 = px.pie(family_status_app2, names=family_status_app2.index, values=family_status_app2.values,
+                      title=f'Family Status of {app2_cleaned} Users', color_discrete_sequence=custom_colors)
+    fig_pie2.update_traces(sort=False, rotation=90)
+
+    # Display the pie charts side by side
+    col1, col2 = st.columns(2)
+    with col1:
+        st.plotly_chart(fig_pie1)
+    with col2:
+        st.plotly_chart(fig_pie2)
