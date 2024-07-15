@@ -15,7 +15,7 @@ st.set_page_config(
 
 # Load the CSV file into a DataFrame
 file_path = 'cleaned_survey_data.csv'
-df = pd.read_csv(file_path)
+df_original = pd.read_csv(file_path)
 
 # Binary replacement dictionary
 binary = {
@@ -24,7 +24,8 @@ binary = {
 }
 
 # Apply the replacement to the selected columns
-columns_to_rename = [col for col in df.columns if col.startswith('B-')]
+columns_to_rename = [col for col in df_original.columns if col.startswith('B-')]
+df = df_original.copy()
 for col in columns_to_rename:
     df[col] = df[col].replace(binary)
 
@@ -34,16 +35,13 @@ st.title('Analyzing Social Network and Online Service Usage Patterns')
 # Select category for analysis
 category = st.selectbox('Select a Category from the following options:', ['Age_group', 'Gender', 'Income', 'App Usage Frequency'])
 
-# Create a copy of the original dataframe to avoid altering it
-df_original = df.copy()
-
 # Extract relevant columns for the selected category
 if category == 'Age_group':
     category_order = ['18-24', '25-30', '31-39', '40-49', '50-64', '65+']
     df[category] = pd.Categorical(df[category], categories=category_order, ordered=True)
 elif category == 'App Usage Frequency':
-    frequency_columns = [col for col in df_original.columns if col.startswith('Frequency-')]
-    df_long_freq = pd.melt(df_original, id_vars=['Gender', 'Income'], value_vars=frequency_columns,
+    frequency_columns = [col for col in df.columns if col.startswith('Frequency-')]
+    df_long_freq = pd.melt(df, id_vars=['Gender', 'Income'], value_vars=frequency_columns,
                            var_name='AppName', value_name='Frequency')
     df_long_freq['AppName'] = df_long_freq['AppName'].str.replace('Frequency-', '')
     main_apps = ['Facebook', 'YouTube', 'Instagram', 'TikTok', 'Twitter', 'LinkedIn', 'WhatsApp']
@@ -198,6 +196,65 @@ with col2:
     # Filter out the first app from the options for the second dropdown
     app_options_filtered = [app for app in app_options if app != app1]
     app2 = st.selectbox('Select second app', app_options_filtered)
+
+# Filter dataframe for selected apps
+selected_apps = [f'Frequency-{app1}-num', f'Frequency-{app2}-num']
+
+# Prepare the data for scatter plots
+df_scatter = df_original.copy()
+df_scatter['Frequency-Instagram-num'] = df_scatter['Frequency-Instagram'].map(lambda x: {'Daily': 31, 'Several times a week': 20, 'Several times a month': 10, 'Less often': 5, 'Not Using': 0}[x])
+df_scatter['Frequency-Facebook-num'] = df_scatter['Frequency-Facebook'].map(lambda x: {'Daily': 31, 'Several times a week': 20, 'Several times a month': 10, 'Less often': 5, 'Not Using': 0}[x])
+df_scatter['Frequency-Twitter-num'] = df_scatter['Frequency-Twitter'].map(lambda x: {'Daily': 31, 'Several times a week': 20, 'Several times a month': 10, 'Less often': 5, 'Not Using': 0}[x])
+df_scatter['Frequency-YouTube-num'] = df_scatter['Frequency-YouTube'].map(lambda x: {'Daily': 31, 'Several times a week': 20, 'Several times a month': 10, 'Less often': 5, 'Not Using': 0}[x])
+
+# Section 2: Scatter Plots
+st.header(f'Scatter Plots Illustrating the Relationship Between Age, Income, and Usage Frequency')
+
+# Custom color scale from light to dark
+custom_color_scale = [
+    [0, "yellow"],
+    [1, "darkred"]
+]
+
+# Scatter plot for the first app
+fig_app1 = px.scatter(
+    df_scatter,
+    x='Age_group-num',
+    y='Income-num',
+    color=f'Frequency-{app1}-num',
+    title=f'{app1}',
+    labels={f'Frequency-{app1}-num': f'{app1} Frequency'},
+    color_continuous_scale=custom_color_scale
+)
+
+fig_app1.update_layout(
+    xaxis_title='Age group',
+    yaxis_title='Income'
+)
+
+# Scatter plot for the second app
+fig_app2 = px.scatter(
+    df_scatter,
+    x='Age_group-num',
+    y='Income-num',
+    color=f'Frequency-{app2}-num',
+    title=f'{app2}',
+    labels={f'Frequency-{app2}-num': f'{app2} Frequency'},
+    color_continuous_scale=custom_color_scale
+)
+
+fig_app2.update_layout(
+    xaxis_title='Age group',
+    yaxis_title='Income'
+)
+
+col1, col2 = st.columns([1, 1])
+
+with col1:
+    st.plotly_chart(fig_app1, use_container_width=True)
+
+with col2:
+    st.plotly_chart(fig_app2, use_container_width=True)
 
 # Filter dataframe for selected apps
 selected_apps = [f'Frequency-{app1}-num', f'Frequency-{app2}-num']
