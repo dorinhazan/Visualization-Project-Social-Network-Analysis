@@ -117,13 +117,12 @@ df_insights['Proportion'] = (df_insights['Count'] / df_insights['TotalUserBase']
 # Merge insights with melted dataframe
 df_final = pd.merge(df_melted, df_insights, on=['AppName', category], suffixes=('', '_insights'))
 
-# Define color palettes for the categories
 diverging_palette = {
-    'Not Using': '#ff7f0e',  # Orange
-    'Less often': '#fdae6b',  # Light orange
-    'Several times a month': '#d9d9d9',  # Gray
-    'Several times a week': '#a6cee3',  # Light blue
-    'Daily': '#1f78b4',  # Blue
+    'Not Using': '#deebf7',  # Light blue
+    'Less often': '#9ecae1',  # Light-medium blue
+    'Several times a month': '#3182bd',  # Medium blue
+    'Several times a week': '#08519c',  # Dark-medium blue
+    'Daily': '#08306b',  # Dark blue
 }
 
 sequential_palette = {
