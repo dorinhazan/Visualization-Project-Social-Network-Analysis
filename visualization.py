@@ -288,7 +288,7 @@ else:
 # Section 5: Pie Charts for Family Status of Users
 st.header(f'Pie Charts Showing Family Status of Users in {app1} and {app2}')
 
-if 'FamilyStatus' in df.columns and 'Facebook' in df.columns and 'Instagram' in df.columns:
+f 'FamilyStatus' in df.columns and 'Facebook' in df.columns and 'Instagram' in df.columns:
     # Filter dataframe for the selected apps
     family_status_columns = ['FamilyStatus', 'Facebook', 'Instagram']
     df_family_status = df[family_status_columns]
@@ -304,10 +304,11 @@ if 'FamilyStatus' in df.columns and 'Facebook' in df.columns and 'Instagram' in 
         # Sort data from highest to lowest
         data = data.sort_values(ascending=False)
         fig, ax = plt.subplots()
-        wedges, texts, autotexts = ax.pie(data, labels=data.index, autopct=lambda p: f'{p:.1f}%', startangle=90, counterclock=False, colors=custom_colors)
+        wedges, texts, autotexts = ax.pie(data, autopct=lambda p: f'{p:.1f}%', startangle=90, counterclock=False, colors=custom_colors)
         ax.axis('equal')  # Equal aspect ratio ensures that pie is drawn as a circle.
         plt.setp(autotexts, size=10, weight="bold")
         ax.set_title(title)
+        ax.legend(wedges, data.index, title="Family Status", loc="center left", bbox_to_anchor=(1, 0, 0.5, 1))
         return fig
 
     # Pie chart for Facebook
