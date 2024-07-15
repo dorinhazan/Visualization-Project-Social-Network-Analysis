@@ -288,7 +288,7 @@ else:
 # Section 5: Pie Charts for Family Status of Users
 st.header(f'Pie Charts Showing Family Status of Users in {app1} and {app2}')
 
-f 'FamilyStatus' in df.columns and 'Facebook' in df.columns and 'Instagram' in df.columns:
+If 'FamilyStatus' in df.columns and 'Facebook' in df.columns and 'Instagram' in df.columns:
     # Filter dataframe for the selected apps
     family_status_columns = ['FamilyStatus', 'Facebook', 'Instagram']
     df_family_status = df[family_status_columns]
