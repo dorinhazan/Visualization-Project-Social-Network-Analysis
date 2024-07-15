@@ -30,7 +30,7 @@ for col in columns_to_rename:
     df[col] = df[col].replace(binary)
 
 # Streamlit app
-st.title('App Usage Analysis')
+st.title('Analyzing Social Network and Online Service Usage Patterns')
 
 # Select category for analysis
 category = st.selectbox('Select a Category from the following options:', ['Age_group', 'Gender', 'Income', 'App Usage Frequency'])
@@ -214,36 +214,31 @@ custom_color_scale = [
 # Scatter plot for the first app
 fig_app1 = px.scatter(
     df,
-    x='Age group',
-    y='Income',
+    x='Age_group-num',
+    y='Income-num',
     color=selected_apps[0],
-    title=f'{app1} Platform',
-    labels={selected_apps[0]: f'{app1} Frequency of use'},
+    title=f'{app1} Usage',
+    labels={selected_apps[0]: f'{app1} Frequency'},
     color_continuous_scale=custom_color_scale
 )
 
 fig_app1.update_layout(
     autosize=False,
-    width=700,  
-    height=600  
+    width=700,  # Adjust the width as needed
+    height=600  # Adjust the height as needed
 )
 
 # Scatter plot for the second app
 fig_app2 = px.scatter(
     df,
-    x='Age group',
-    y='Income',
+    x='Age_group-num',
+    y='Income-num',
     color=selected_apps[1],
-    title=f'{app2} Platform',
-    labels={selected_apps[1]: f'{app2} Frequency of use'},
+    title=f'{app2} Usage',
+    labels={selected_apps[1]: f'{app2} Frequency'},
     color_continuous_scale=custom_color_scale
 )
 
-fig_app2.update_layout(
-    autosize=False,
-    width=700,  
-    height=600  
-)
 
 col1, col2 = st.columns([1, 1])
 
