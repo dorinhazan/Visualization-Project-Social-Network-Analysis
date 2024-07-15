@@ -9,7 +9,7 @@ Original file is located at
 
 
 import pandas as pd
-data = pd.read_excel("/content/socialmedia_survey_data.xlsx")
+data = pd.read_excel("socialmedia_survey_data.xlsx")
 
 # Hebrew to English mapping for column headers
 hebrew_to_english_headers = {
