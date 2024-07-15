@@ -248,6 +248,8 @@ with col2:
     st.plotly_chart(fig_app2, use_container_width=True)
 
 
+
+
 # Section 4: Heatmaps for App Usage by Religion
 st.header(f'Heatmaps Showing the Correlation Between Religion and Usage Of the Apps {app1} And {app2}')
 
