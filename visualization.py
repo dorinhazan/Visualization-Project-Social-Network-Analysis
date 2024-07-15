@@ -8,7 +8,7 @@ import os
 
 # Set page configuration
 st.set_page_config(
-    page_title="App Usage Analysis",
+    page_title=""Analyzing Social Network And Online Service Usage Patterns",
     page_icon="📊",
     layout="wide",
     initial_sidebar_state="expanded"
@@ -33,7 +33,7 @@ for col in columns_to_rename:
 st.title('App Usage Analysis')
 
 # Select category for analysis
-category = st.selectbox('Select a Category', ['Age_group', 'Gender', 'Income', 'App Usage Frequency'])
+category = st.selectbox('Select a Category from the following options:', ['Age_group', 'Gender', 'Income', 'App Usage Frequency'])
 
 # Extract relevant columns for the selected category
 if category == 'Age_group':
@@ -166,7 +166,7 @@ fig = px.bar(df_final,
 fig.update_traces(texttemplate='%{y:.2f}%', textposition='inside', insidetextanchor='middle')
 
 fig.update_layout(
-    title=f'App Usage by {category}',
+    title=f'Application usage categorized by {category}',
     xaxis_title='App Name',
     yaxis_title='Percentage',
     yaxis=dict(showticklabels=True),  # Show y-axis labels
@@ -181,10 +181,10 @@ st.plotly_chart(fig, use_container_width=True)
 
 
 # Streamlit app
-st.title('App Usage Analysis and Visualizations')
+st.title('Visualizing Application Usage Patterns Across Two Applications')
 
 # Section 1: App Selection
-st.header('Select Apps for Analysis')
+st.header('Select your two main Apps for Analysis')
 
 # Dropdowns for selecting two apps
 app_options = ['Facebook', 'Instagram', 'YouTube', 'Twitter']
@@ -203,7 +203,7 @@ with col2:
 selected_apps = [f'Frequency-{app1}-num', f'Frequency-{app2}-num']
 
 # Section 2: Scatter Plots
-st.header(f'Scatter Plots of Age vs Income with Frequency for {app1} and {app2}')
+st.header(f'Scatter Plots Illustrating the Relationship Between Age, Income, and Usage Frequency for {app1} and {app2}')
 
 # Custom color scale from light to dark
 custom_color_scale = [
@@ -214,35 +214,35 @@ custom_color_scale = [
 # Scatter plot for the first app
 fig_app1 = px.scatter(
     df,
-    x='Age_group-num',
-    y='Income-num',
+    x='Age group',
+    y='Income',
     color=selected_apps[0],
-    title=f'{app1} Usage',
-    labels={selected_apps[0]: f'{app1} Frequency'},
+    title=f'{app1} Platform',
+    labels={selected_apps[0]: f'{app1} Frequency of use'},
     color_continuous_scale=custom_color_scale
 )
 
 fig_app1.update_layout(
     autosize=False,
-    width=700,  # Adjust the width as needed
-    height=600  # Adjust the height as needed
+    width=700,  
+    height=600  
 )
 
 # Scatter plot for the second app
 fig_app2 = px.scatter(
     df,
-    x='Age_group-num',
-    y='Income-num',
+    x='Age group',
+    y='Income',
     color=selected_apps[1],
-    title=f'{app2} Usage',
-    labels={selected_apps[1]: f'{app2} Frequency'},
+    title=f'{app2} Platform',
+    labels={selected_apps[1]: f'{app2} Frequency of use'},
     color_continuous_scale=custom_color_scale
 )
 
 fig_app2.update_layout(
     autosize=False,
-    width=700,  # Adjust the width as needed
-    height=600  # Adjust the height as needed
+    width=700,  
+    height=600  
 )
 
 col1, col2 = st.columns([1, 1])
@@ -255,7 +255,7 @@ with col2:
 
 
 # Section 4: Heatmaps for App Usage by Religion
-st.header('Heatmaps for App Usage by Religion')
+st.header('Heatmaps Showing the Correlation Between the Apps {app1}, {app2} Usage and Users' Religious Affiliation')
 
 # Select binary columns for heatmap
 binary_columns = [col for col in df.columns if col.startswith('B-')]
@@ -276,14 +276,14 @@ else:
     heatmap_data_app1.columns = ['Not Using', 'Using']
     fig1, ax1 = plt.subplots(figsize=(8, 6))
     sns.heatmap(heatmap_data_app1, annot=True, fmt='d', cmap='Blues', ax=ax1)
-    ax1.set_title(f'Heatmap for {app1_cleaned} Usage by Religion')
+    ax1.set_title(f'{app1_cleaned}')
 
     # Heatmap for the second app
     heatmap_data_app2 = pd.crosstab(df['Religion'], df[app2_cleaned])
     heatmap_data_app2.columns = ['Not Using', 'Using']
     fig2, ax2 = plt.subplots(figsize=(8, 6))
     sns.heatmap(heatmap_data_app2, annot=True, fmt='d', cmap='Blues', ax=ax2)
-    ax2.set_title(f'Heatmap for {app2_cleaned} Usage by Religion')
+    ax2.set_title(f'{app2_cleaned}')
 
     col1, col2 = st.columns(2)
     with col1:
@@ -291,7 +291,7 @@ else:
     with col2:
         st.pyplot(fig2)
 # Section 5: Pie Charts for Family Status of Users
-st.header('Pie Charts for Family Status of Users')
+st.header('Pie Charts Showing Family Status of Users in {app_1}, {app_2}')
 
 if 'FamilyStatus' in df.columns and app1_cleaned in df.columns and app2_cleaned in df.columns:
     # Filter dataframe for the selected apps
@@ -317,11 +317,11 @@ if 'FamilyStatus' in df.columns and app1_cleaned in df.columns and app2_cleaned 
 
     # Pie chart for the first app
     family_status_app1 = df_family_status[df_family_status[app1_cleaned] == 1]['FamilyStatus'].value_counts()
-    fig_pie1 = create_sorted_pie_chart(family_status_app1, f'Family Status of {app1_cleaned} Users')
+    fig_pie1 = create_sorted_pie_chart(family_status_app1, f'{app1_cleaned}')
 
     # Pie chart for the second app
     family_status_app2 = df_family_status[df_family_status[app2_cleaned] == 1]['FamilyStatus'].value_counts()
-    fig_pie2 = create_sorted_pie_chart(family_status_app2, f'Family Status of {app2_cleaned} Users')
+    fig_pie2 = create_sorted_pie_chart(family_status_app2, f'{app2_cleaned}')
 
     # Display the pie charts side by side
     col1, col2 = st.columns(2)
