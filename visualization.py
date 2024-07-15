@@ -256,9 +256,6 @@ with col1:
 with col2:
     st.plotly_chart(fig_app2, use_container_width=True)
 
-# Filter dataframe for selected apps
-selected_apps = [f'Frequency-{app1}-num', f'Frequency-{app2}-num']
-
 # Section 4: Heatmaps for App Usage by Religion
 st.header(f'Heatmaps Showing the Correlation Between Religion and Application Usage')
 
