@@ -286,7 +286,7 @@ else:
     with col2:
         st.pyplot(fig2)
 # Section 5: Pie Charts for Family Status of Users
-st.header('Pie Charts Showing Family Status of Users in {app_1}, {app_2}')
+st.header(f'Pie Charts Showing Family Status of Users in {app_1}, {app_2}')
 
 if 'FamilyStatus' in df.columns and app1_cleaned in df.columns and app2_cleaned in df.columns:
     # Filter dataframe for the selected apps
