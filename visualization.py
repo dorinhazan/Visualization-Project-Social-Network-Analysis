@@ -316,7 +316,7 @@ if 'FamilyStatus' in df.columns and 'Facebook' in df.columns and 'Instagram' in 
         ax.axis('equal')  # Equal aspect ratio ensures that pie is drawn as a circle.
         plt.setp(autotexts, size=10, weight="bold")
         ax.set_title(title)
-        ax.legend(wedges, data.index, title="Family Status", loc="center left", bbox_to_anchor=(1, 0, 0.5, 1))
+        ax.legend(wedges, data.index, title="Family Status", loc="upper left", bbox_to_anchor=(1, 0, 0.5, 1))
         return fig
 
     # Pie chart for Facebook
