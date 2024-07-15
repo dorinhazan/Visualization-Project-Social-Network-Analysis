@@ -267,14 +267,14 @@ else:
     df.rename(columns={binary_columns[0]: app1_cleaned, binary_columns[1]: app2_cleaned}, inplace=True)
 
     # Heatmap for the first app
-    heatmap_data_app1 = pd.crosstab(df['Religion'], df[app1_cleaned])
+    heatmap_data_app1 = pd.crosstab(df[app1_cleaned])
     heatmap_data_app1.columns = ['Not Using', 'Using']
     fig1, ax1 = plt.subplots(figsize=(8, 6))
     sns.heatmap(heatmap_data_app1, annot=True, fmt='d', cmap='Blues', ax=ax1)
     ax1.set_title(f'{app1_cleaned}')
 
     # Heatmap for the second app
-    heatmap_data_app2 = pd.crosstab(df['Religion'], df[app2_cleaned])
+    heatmap_data_app2 = pd.crosstab(df[app2_cleaned])
     heatmap_data_app2.columns = ['Not Using', 'Using']
     fig2, ax2 = plt.subplots(figsize=(8, 6))
     sns.heatmap(heatmap_data_app2, annot=True, fmt='d', cmap='Blues', ax=ax2)
