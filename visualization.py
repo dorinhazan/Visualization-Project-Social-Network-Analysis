@@ -216,7 +216,7 @@ fig_app1 = px.scatter(
     x='Age_group-num',
     y='Income-num',
     color=selected_apps[0],
-    title=f'{app1} Usage',
+    title=f'{app1}',
     labels={selected_apps[0]: f'{app1} Frequency'},
     color_continuous_scale=custom_color_scale
 )
@@ -228,7 +228,7 @@ fig_app2 = px.scatter(
     x='Age_group-num',
     y='Income-num',
     color=selected_apps[1],
-    title=f'{app2} Usage',
+    title=f'{app2}',
     labels={selected_apps[1]: f'{app2} Frequency'},
     color_continuous_scale=custom_color_scale
 )
