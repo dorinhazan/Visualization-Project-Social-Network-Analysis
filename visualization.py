@@ -221,6 +221,7 @@ fig_app1 = px.scatter(
     color_continuous_scale=custom_color_scale
 )
 
+
 # Scatter plot for the second app
 fig_app2 = px.scatter(
     df,
@@ -240,6 +241,7 @@ with col1:
 
 with col2:
     st.plotly_chart(fig_app2, use_container_width=True)
+
 
 
 
