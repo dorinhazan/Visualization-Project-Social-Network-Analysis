@@ -201,11 +201,11 @@ with col2:
 selected_apps = [f'Frequency-{app1}-num', f'Frequency-{app2}-num']
 
 # Prepare the data for scatter plots
-df_scatter = df_original.copy()
-df_scatter['Frequency-Instagram-num'] = df_scatter['Frequency-Instagram'].map(lambda x: {'Daily': 31, 'Several times a week': 20, 'Several times a month': 10, 'Less often': 5, 'Not Using': 0}[x])
-df_scatter['Frequency-Facebook-num'] = df_scatter['Frequency-Facebook'].map(lambda x: {'Daily': 31, 'Several times a week': 20, 'Several times a month': 10, 'Less often': 5, 'Not Using': 0}[x])
-df_scatter['Frequency-Twitter-num'] = df_scatter['Frequency-Twitter'].map(lambda x: {'Daily': 31, 'Several times a week': 20, 'Several times a month': 10, 'Less often': 5, 'Not Using': 0}[x])
-df_scatter['Frequency-YouTube-num'] = df_scatter['Frequency-YouTube'].map(lambda x: {'Daily': 31, 'Several times a week': 20, 'Several times a month': 10, 'Less often': 5, 'Not Using': 0}[x])
+df = df_original.copy()
+df['Frequency-Instagram-num'] = df['Frequency-Instagram'].map(lambda x: {'Daily': 31, 'Several times a week': 20, 'Several times a month': 10, 'Less often': 5, 'Not Using': 0}[x])
+df['Frequency-Facebook-num'] = df['Frequency-Facebook'].map(lambda x: {'Daily': 31, 'Several times a week': 20, 'Several times a month': 10, 'Less often': 5, 'Not Using': 0}[x])
+df['Frequency-Twitter-num'] = df['Frequency-Twitter'].map(lambda x: {'Daily': 31, 'Several times a week': 20, 'Several times a month': 10, 'Less often': 5, 'Not Using': 0}[x])
+df['Frequency-YouTube-num'] = df['Frequency-YouTube'].map(lambda x: {'Daily': 31, 'Several times a week': 20, 'Several times a month': 10, 'Less often': 5, 'Not Using': 0}[x])
 
 # Section 2: Scatter Plots
 st.header(f'Scatter Plots Illustrating the Relationship Between Age, Income, and Usage Frequency')
@@ -218,7 +218,7 @@ custom_color_scale = [
 
 # Scatter plot for the first app
 fig_app1 = px.scatter(
-    df_scatter,
+    df,
     x='Age_group-num',
     y='Income-num',
     color=f'Frequency-{app1}-num',
@@ -234,7 +234,7 @@ fig_app1.update_layout(
 
 # Scatter plot for the second app
 fig_app2 = px.scatter(
-    df_scatter,
+    df,
     x='Age_group-num',
     y='Income-num',
     color=f'Frequency-{app2}-num',
