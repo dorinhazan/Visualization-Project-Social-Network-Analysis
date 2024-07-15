@@ -258,7 +258,7 @@ with col2:
 
 
 # Section 4: Heatmaps for App Usage by Religion
-st.header(f'Heatmaps Showing the Correlation Between Religion and Usage')
+st.header(f'Heatmaps Showing the Correlation Between Religion and Application Usage')
 
 # Select binary columns for heatmap
 binary_columns = [col for col in df.columns if col.startswith('B-')]
