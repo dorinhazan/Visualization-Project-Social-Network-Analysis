@@ -293,7 +293,6 @@ else:
 # Section 5: Pie Charts for Family Status of Users
 st.header('Pie Charts for Family Status of Users')
 
-# Ensure the columns exist
 if 'FamilyStatus' in df.columns and app1_cleaned in df.columns and app2_cleaned in df.columns:
     # Filter dataframe for the selected apps
     family_status_columns = ['FamilyStatus', app1_cleaned, app2_cleaned]
@@ -305,21 +304,28 @@ if 'FamilyStatus' in df.columns and app1_cleaned in df.columns and app2_cleaned 
     # Define custom colors
     custom_colors = ["#FFCD00", "#008FC4", "#1AB394", "#FFA000", "#FF3D00"]
 
+    # Function to create sorted pie chart using Matplotlib
+    def create_sorted_pie_chart(data, title):
+        # Sort data from highest to lowest
+        data = data.sort_values(ascending=False)
+        fig, ax = plt.subplots()
+        wedges, texts, autotexts = ax.pie(data, labels=data.index, autopct='%1.1f%%', startangle=90, counterclock=False, colors=custom_colors)
+        ax.axis('equal')  # Equal aspect ratio ensures that pie is drawn as a circle.
+        plt.setp(autotexts, size=10, weight="bold")
+        ax.set_title(title)
+        return fig
+
     # Pie chart for the first app
-    family_status_app1 = df_family_status[df_family_status[app1_cleaned] == 1]['FamilyStatus'].value_counts().sort_values(ascending=False)
-    fig_pie1 = px.pie(family_status_app1, names=family_status_app1.index, values=family_status_app1.values,
-                      title=f'Family Status of {app1_cleaned} Users', color_discrete_sequence=custom_colors)
-    fig_pie1.update_traces(sort=False, rotation=90)
+    family_status_app1 = df_family_status[df_family_status[app1_cleaned] == 1]['FamilyStatus'].value_counts()
+    fig_pie1 = create_sorted_pie_chart(family_status_app1, f'Family Status of {app1_cleaned} Users')
 
     # Pie chart for the second app
-    family_status_app2 = df_family_status[df_family_status[app2_cleaned] == 1]['FamilyStatus'].value_counts().sort_values(ascending=False)
-    fig_pie2 = px.pie(family_status_app2, names=family_status_app2.index, values=family_status_app2.values,
-                      title=f'Family Status of {app2_cleaned} Users', color_discrete_sequence=custom_colors)
-    fig_pie2.update_traces(sort=False, rotation=90)
+    family_status_app2 = df_family_status[df_family_status[app2_cleaned] == 1]['FamilyStatus'].value_counts()
+    fig_pie2 = create_sorted_pie_chart(family_status_app2, f'Family Status of {app2_cleaned} Users')
 
     # Display the pie charts side by side
     col1, col2 = st.columns(2)
     with col1:
-        st.plotly_chart(fig_pie1)
+        st.pyplot(fig_pie1)
     with col2:
-        st.plotly_chart(fig_pie2)
+        st.pyplot(fig_pie2)
