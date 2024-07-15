@@ -34,13 +34,16 @@ st.title('Analyzing Social Network and Online Service Usage Patterns')
 # Select category for analysis
 category = st.selectbox('Select a Category from the following options:', ['Age_group', 'Gender', 'Income', 'App Usage Frequency'])
 
+# Create a copy of the original dataframe to avoid altering it
+df_original = df.copy()
+
 # Extract relevant columns for the selected category
 if category == 'Age_group':
     category_order = ['18-24', '25-30', '31-39', '40-49', '50-64', '65+']
     df[category] = pd.Categorical(df[category], categories=category_order, ordered=True)
 elif category == 'App Usage Frequency':
-    frequency_columns = [col for col in df.columns if col.startswith('Frequency-')]
-    df_long_freq = pd.melt(df, id_vars=['Gender', 'Income'], value_vars=frequency_columns,
+    frequency_columns = [col for col in df_original.columns if col.startswith('Frequency-')]
+    df_long_freq = pd.melt(df_original, id_vars=['Gender', 'Income'], value_vars=frequency_columns,
                            var_name='AppName', value_name='Frequency')
     df_long_freq['AppName'] = df_long_freq['AppName'].str.replace('Frequency-', '')
     main_apps = ['Facebook', 'YouTube', 'Instagram', 'TikTok', 'Twitter', 'LinkedIn', 'WhatsApp']
@@ -69,7 +72,6 @@ df_long['AppName'] = df_long['AppName'].str.replace('B-', '')
 # Filter to include only main applications
 main_apps = ['Facebook', 'YouTube', 'Instagram', 'TikTok', 'Twitter', 'LinkedIn', 'WhatsApp']
 df_long = df_long[df_long['AppName'].isin(main_apps)]
-
 
 # Calculate the count of users for each app and category
 if category != 'App Usage Frequency':
@@ -196,6 +198,60 @@ with col2:
     # Filter out the first app from the options for the second dropdown
     app_options_filtered = [app for app in app_options if app != app1]
     app2 = st.selectbox('Select second app', app_options_filtered)
+
+# Filter dataframe for selected apps
+selected_apps = [f'Frequency-{app1}-num', f'Frequency-{app2}-num']
+
+# Section 2: Scatter Plots
+st.header(f'Scatter Plots Illustrating the Relationship Between Age, Income, and Usage Frequency')
+
+# Custom color scale from light to dark
+custom_color_scale = [
+    [0, "yellow"],
+    [1, "darkred"]
+]
+
+# Scatter plot for the first app
+fig_app1 = px.scatter(
+    df,
+    x='Age_group-num',
+    y='Income-num',
+    color=selected_apps[0],
+    title=f'{app1}',
+    labels={selected_apps[0]: f'{app1} Frequency'},
+    color_continuous_scale=custom_color_scale
+)
+
+fig_app1.update_layout(
+    xaxis_title='Age group',
+    yaxis_title='Income'
+)
+
+# Scatter plot for the second app
+fig_app2 = px.scatter(
+    df,
+    x='Age_group-num',
+    y='Income-num',
+    color=selected_apps[1],
+    title=f'{app2}',
+    labels={selected_apps[1]: f'{app2} Frequency'},
+    color_continuous_scale=custom_color_scale
+)
+
+fig_app2.update_layout(
+    xaxis_title='Age group',
+    yaxis_title='Income'
+)
+
+
+col1, col2 = st.columns([1, 1])
+
+with col1:
+    st.plotly_chart(fig_app1, use_container_width=True)
+
+with col2:
+    st.plotly_chart(fig_app2, use_container_width=True)
+
 
 # Filter dataframe for selected apps
 selected_apps = [f'Frequency-{app1}-num', f'Frequency-{app2}-num']
