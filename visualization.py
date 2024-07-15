@@ -221,6 +221,11 @@ fig_app1 = px.scatter(
     color_continuous_scale=custom_color_scale
 )
 
+fig_app1.update_layout(
+    xaxis_title='Age group',
+    yaxis_title='Income'
+
+)
 
 # Scatter plot for the second app
 fig_app2 = px.scatter(
@@ -231,6 +236,12 @@ fig_app2 = px.scatter(
     title=f'{app2}',
     labels={selected_apps[1]: f'{app2} Frequency'},
     color_continuous_scale=custom_color_scale
+)
+
+fig_app2.update_layout(
+    xaxis_title='Age group',
+    yaxis_title='Income'
+
 )
 
 
