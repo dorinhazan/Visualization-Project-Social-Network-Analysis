@@ -202,7 +202,7 @@ with col2:
 selected_apps = [f'Frequency-{app1}-num', f'Frequency-{app2}-num']
 
 # Section 2: Scatter Plots
-st.header(f'Scatter Plots Illustrating the Relationship Between Age, Income, and Usage Frequency for {app1} and {app2}')
+st.header(f'Scatter Plots Illustrating the Relationship Between Age, Income, and Usage Frequency')
 
 # Custom color scale from light to dark
 custom_color_scale = [
