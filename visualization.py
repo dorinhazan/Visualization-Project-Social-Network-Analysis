@@ -221,12 +221,6 @@ fig_app1 = px.scatter(
     color_continuous_scale=custom_color_scale
 )
 
-fig_app1.update_layout(
-    autosize=False,
-    width=700,  # Adjust the width as needed
-    height=600  # Adjust the height as needed
-)
-
 # Scatter plot for the second app
 fig_app2 = px.scatter(
     df,
