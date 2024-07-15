@@ -8,7 +8,7 @@ import os
 
 # Set page configuration
 st.set_page_config(
-    page_title=""Analyzing Social Network And Online Service Usage Patterns",
+    page_title="Analyzing Social Network And Online Service Usage Patterns",
     page_icon="📊",
     layout="wide",
     initial_sidebar_state="expanded"
