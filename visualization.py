@@ -136,11 +136,11 @@ sequential_palette = {
 }
 
 income_palette = {
-    'Way below Average': '#edf8e9',  # Light green
-    'below Average': '#bae4b3',  # Light-medium green
-    'Similar to Average': '#74c476',  # Medium green
-    'Above Average': '#31a354',  # Dark-medium green
-    'Way Above Average': '#006d2c'  # Dark green
+    'Way below Average': '#fff5eb',  # Light orange
+    'below Average': '#fd8d3c',  # Light-medium orange
+    'Similar to Average': '#fc4e2a',  # Medium orange
+    'Above Average': '#e31a1c',  # Dark-medium orange
+    'Way Above Average': '#b10026'  # Dark red-orange
 }
 
 gender_palette = {
