@@ -7,7 +7,6 @@ Original file is located at
     https://colab.research.google.com/drive/16lF7iGPrfClMhGSusOZNqDEf5YYjfr0n
 """
 
-!pip install streamlit
 
 import pandas as pd
 data = pd.read_excel("/content/socialmedia_survey_data.xlsx")
@@ -173,7 +172,6 @@ data.to_csv('cleaned_survey_data.csv', index=False)
 
 df = pd.read_csv('cleaned_survey_data.csv')
 
-!pip install pyngrok
 
 import numpy as np
 # Set random seed for reproducibility
