@@ -5,6 +5,28 @@ import seaborn as sns
 import matplotlib.pyplot as plt
 import os
 
+
+
+# Print the current working directory
+st.write("Current Working Directory:", os.getcwd())
+
+# Use an absolute path for the file
+file_path = os.path.join(os.getcwd(), 'cleaned_survey_data.csv')
+
+# Check if the file exists before loading
+if os.path.exists(file_path):
+    # Load the CSV file into a DataFrame
+    df_original = pd.read_csv(file_path)
+    st.write("File successfully read!")
+else:
+    st.error(f"File not found at: {file_path}")
+
+# Proceed with the rest of your code if the file was read successfully
+if 'df_original' in locals():
+
+
+
+    
 # Set page configuration
 st.set_page_config(
     page_title="Analyzing Social Platforms Usage Patterns",
