@@ -186,7 +186,7 @@ st.title('Visualizing Application Usage Patterns Across Two Applications')
 st.header('Select your two main Apps for Analysis')
 
 # Dropdowns for selecting two apps
-app_options = ['Facebook', 'Instagram', 'YouTube', 'Twitter']
+app_options = ['Facebook', 'Instagram', 'YouTube', 'Twitter', 'TikTok', 'WhatsApp']
 # Place dropdowns for selecting apps side by side
 col1, col2 = st.columns(2)
 
@@ -203,10 +203,14 @@ selected_apps = [f'Frequency-{app1}-num', f'Frequency-{app2}-num']
 
 # Prepare the data for scatter plots
 df = df_original.copy()
+df = df_original.copy()
 df['Frequency-Instagram-num'] = df['Frequency-Instagram'].map(lambda x: {'Daily': 31, 'Several times a week': 20, 'Several times a month': 10, 'Less often': 5, 'Not Using': 0}[x])
 df['Frequency-Facebook-num'] = df['Frequency-Facebook'].map(lambda x: {'Daily': 31, 'Several times a week': 20, 'Several times a month': 10, 'Less often': 5, 'Not Using': 0}[x])
 df['Frequency-Twitter-num'] = df['Frequency-Twitter'].map(lambda x: {'Daily': 31, 'Several times a week': 20, 'Several times a month': 10, 'Less often': 5, 'Not Using': 0}[x])
 df['Frequency-YouTube-num'] = df['Frequency-YouTube'].map(lambda x: {'Daily': 31, 'Several times a week': 20, 'Several times a month': 10, 'Less often': 5, 'Not Using': 0}[x])
+df['Frequency-TikTok-num'] = df['Frequency-TikTok'].map(lambda x: {'Daily': 31, 'Several times a week': 20, 'Several times a month': 10, 'Less often': 5, 'Not Using': 0}[x])
+df['Frequency-WhatsApp-num'] = df['Frequency-WhatsApp'].map(lambda x: {'Daily': 31, 'Several times a week': 20, 'Several times a month': 10, 'Less often': 5, 'Not Using': 0}[x])
+
 
 # Section 2: Scatter Plots
 st.header(f'Scatter Plots Illustrating the Relationship Between Age, Income, and Usage Frequency')
