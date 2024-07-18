@@ -317,29 +317,52 @@ if 'FamilyStatus' in df.columns and 'Facebook' in df.columns and 'Instagram' in 
     # Define custom colors
     custom_colors = ["#FFCD00", "#008FC4", "#1AB394", "#FFA000", "#FF3D00"]
 
-    # Function to create sorted pie chart using Matplotlib
-    def create_sorted_pie_chart(data, title):
+    # Function to create a styled pie chart using Matplotlib
+    def create_styled_pie_chart(data, title):
         # Sort data from highest to lowest
         data = data.sort_values(ascending=False)
-        fig, ax = plt.subplots()
-        wedges, texts, autotexts = ax.pie(data, autopct=lambda p: f'{p:.1f}%', startangle=90, counterclock=False, colors=custom_colors)
-        ax.axis('equal')  # Equal aspect ratio ensures that pie is drawn as a circle.
-        plt.setp(autotexts, size=10, weight="bold")
-        ax.set_title(title)
-        ax.legend(wedges, data.index, title="Family Status", loc="upper left", bbox_to_anchor=(1, 0, 0.5, 1))
+        fig, ax = plt.subplots(figsize=(8, 6))
+        
+        # Create pie chart
+        wedges, texts, autotexts = ax.pie(
+            data, 
+            autopct=lambda p: f'{p:.1f}%', 
+            startangle=90, 
+            counterclock=False, 
+            colors=custom_colors, 
+            wedgeprops=dict(width=0.4, edgecolor='w')
+        )
+        
+        # Set equal aspect ratio
+        ax.axis('equal')
+        
+        # Customize text and legend
+        plt.setp(autotexts, size=12, weight="bold", color='white')
+        ax.set_title(title, fontsize=16, weight='bold')
+        
+        # Add legend with better positioning
+        ax.legend(
+            wedges, 
+            data.index, 
+            title="Family Status", 
+            loc="center left", 
+            bbox_to_anchor=(1, 0, 0.5, 1),
+            fontsize=12
+        )
+        
         return fig
 
     # Pie chart for Facebook
     family_status_facebook = df_family_status[df_family_status['Facebook'] == 1]['FamilyStatus'].value_counts()
-    fig_pie1 = create_sorted_pie_chart(family_status_facebook, 'Facebook')
+    fig_pie1 = create_styled_pie_chart(family_status_facebook, 'Facebook')
 
     # Pie chart for Instagram
     family_status_instagram = df_family_status[df_family_status['Instagram'] == 1]['FamilyStatus'].value_counts()
-    fig_pie2 = create_sorted_pie_chart(family_status_instagram, 'Instagram')
+    fig_pie2 = create_styled_pie_chart(family_status_instagram, 'Instagram')
 
-    # Display the pie charts side by side
-    col1, col2 = st.columns(2)
+    # Display the pie charts side by side with spacing adjustments
+    col1, col2 = st.columns([1, 1])
     with col1:
-        st.pyplot(fig_pie1)
+        st.pyplot(fig_pie1, bbox_inches='tight')
     with col2:
-        st.pyplot(fig_pie2)
+        st.pyplot(fig_pie2, bbox_inches='tight')
