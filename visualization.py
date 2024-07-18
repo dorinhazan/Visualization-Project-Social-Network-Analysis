@@ -303,25 +303,10 @@ if 'FamilyStatus' in df.columns and 'Facebook' in df.columns and 'Instagram' in 
     # Filter out "Other" category
     df_family_status = df_family_status[df_family_status['FamilyStatus'] != 'Other']
 
-    # Add custom CSS to style the multiselect box
-    st.markdown("""
-    <style>
-    div[data-baseweb="select"] > div {
-        background-color: #f0f2f6;
-        border-radius: 8px;
-    }
-    div[data-baseweb="select"] > div > div {
-        color: #333;
-    }
-    </style>
-    """, unsafe_allow_html=True)
-
-    # Add a filter for family status before creating the pie charts
-    selected_family_status = st.multiselect(
-        'Select Family Status categories to display',
-        options=df_family_status['FamilyStatus'].unique(),
-        default=df_family_status['FamilyStatus'].unique()
-    )
+    # Add checkboxes for family status categories
+    st.markdown("### Select Family Status categories to display")
+    family_status_options = df_family_status['FamilyStatus'].unique()
+    selected_family_status = [status for status in family_status_options if st.checkbox(status, True)]
 
     # Filter the dataframe based on the selected family status
     if selected_family_status:
