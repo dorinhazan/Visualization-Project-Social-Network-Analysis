@@ -295,30 +295,40 @@ else:
         st.pyplot(fig2)
 # Section 5: Pie Charts for Family Status of Users
 st.header(f'Pie Charts Showing Family Status of Users in {app1} and {app2}')
-# Add a filter for family status before creating the pie charts
-selected_family_status = st.multiselect(
-    'Select Family Status categories to display',
-    options=['Married', 'Single', 'Divorced/Separated/Widowed/Single Parent'],
-    default=['Married', 'Single', 'Divorced/Separated/Widowed/Single Parent']
-)
+if 'FamilyStatus' in df.columns and 'Facebook' in df.columns and 'Instagram' in df.columns:
+    # Filter dataframe for the selected apps
+    family_status_columns = ['FamilyStatus', 'Facebook', 'Instagram']
+    df_family_status = df[family_status_columns]
 
-# Filter the dataframe based on the selected family status
-if selected_family_status:
-    df_family_status_filtered = df_family_status[df_family_status['FamilyStatus'].isin(selected_family_status)]
-else:
-    df_family_status_filtered = df_family_status
+    # Filter out "Other" category
+    df_family_status = df_family_status[df_family_status['FamilyStatus'] != 'Other']
 
-# Pie chart for Facebook with the selected family status filter
-family_status_facebook_filtered = df_family_status_filtered[df_family_status_filtered['Facebook'] == 1]['FamilyStatus'].value_counts()
-fig_pie1_filtered = create_sorted_pie_chart(family_status_facebook_filtered, 'Facebook')
+    # Define custom colors
+    custom_colors = ["#FFCD00", "#008FC4", "#1AB394", "#FFA000", "#FF3D00"]
 
-# Pie chart for Instagram with the selected family status filter
-family_status_instagram_filtered = df_family_status_filtered[df_family_status_filtered['Instagram'] == 1]['FamilyStatus'].value_counts()
-fig_pie2_filtered = create_sorted_pie_chart(family_status_instagram_filtered, 'Instagram')
+    # Function to create sorted pie chart using Matplotlib
+    def create_sorted_pie_chart(data, title):
+        # Sort data from highest to lowest
+        data = data.sort_values(ascending=False)
+        fig, ax = plt.subplots()
+        wedges, texts, autotexts = ax.pie(data, autopct=lambda p: f'{p:.1f}%', startangle=90, counterclock=False, colors=custom_colors)
+        ax.axis('equal')  # Equal aspect ratio ensures that pie is drawn as a circle.
+        plt.setp(autotexts, size=10, weight="bold")
+        ax.set_title(title)
+        ax.legend(wedges, data.index, title="Family Status", loc="upper left", bbox_to_anchor=(1, 0, 0.5, 1))
+        return fig
 
-# Display the filtered pie charts side by side
-col1, col2 = st.columns(2)
-with col1:
-    st.pyplot(fig_pie1_filtered)
-with col2:
-    st.pyplot(fig_pie2_filtered)
+    # Pie chart for Facebook
+    family_status_facebook = df_family_status[df_family_status['Facebook'] == 1]['FamilyStatus'].value_counts()
+    fig_pie1 = create_sorted_pie_chart(family_status_facebook, 'Facebook')
+
+    # Pie chart for Instagram
+    family_status_instagram = df_family_status[df_family_status['Instagram'] == 1]['FamilyStatus'].value_counts()
+    fig_pie2 = create_sorted_pie_chart(family_status_instagram, 'Instagram')
+
+    # Display the pie charts side by side
+    col1, col2 = st.columns(2)
+    with col1:
+        st.pyplot(fig_pie1)
+    with col2:
+        st.pyplot(fig_pie2)
