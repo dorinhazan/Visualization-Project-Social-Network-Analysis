@@ -303,6 +303,17 @@ if 'FamilyStatus' in df.columns and 'Facebook' in df.columns and 'Instagram' in 
     # Filter out "Other" category
     df_family_status = df_family_status[df_family_status['FamilyStatus'] != 'Other']
 
+    # Add a filter for family status before creating the pie charts
+    selected_family_status = st.multiselect(
+        'Select Family Status categories to display',
+        options=df_family_status['FamilyStatus'].unique(),
+        default=df_family_status['FamilyStatus'].unique()
+    )
+
+    # Filter the dataframe based on the selected family status
+    if selected_family_status:
+        df_family_status = df_family_status[df_family_status['FamilyStatus'].isin(selected_family_status)]
+
     # Define custom colors
     custom_colors = ["#FFCD00", "#008FC4", "#1AB394", "#FFA000", "#FF3D00"]
 
