@@ -21,9 +21,10 @@ if os.path.exists(file_path):
 else:
     st.error(f"File not found at: {file_path}")
 
-# Proceed with the rest of your code if the file was read successfully
 if 'df_original' in locals():
-
+    st.write("df_original successfully read!")
+else:
+    st.error(f"df_original not found")
 
 
     
