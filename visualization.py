@@ -298,10 +298,11 @@ else:
     with col2:
         st.pyplot(fig2)
 # Section 5: Pie Charts for Family Status of Users
+# Section 5: Pie Charts for Family Status of Users
 st.header(f'Pie Charts Showing Family Status of Users in {app1} and {app2}')
-if 'FamilyStatus' in df.columns and 'Facebook' in df.columns and 'Instagram' in df.columns:
+if 'FamilyStatus' in df.columns and app1 in df.columns and app2 in df.columns:
     # Filter dataframe for the selected apps
-    family_status_columns = ['FamilyStatus', 'Facebook', 'Instagram']
+    family_status_columns = ['FamilyStatus', app1, app2]
     df_family_status = df[family_status_columns]
 
     # Filter out "Other" category
@@ -331,13 +332,13 @@ if 'FamilyStatus' in df.columns and 'Facebook' in df.columns and 'Instagram' in 
         ax.legend(wedges, data.index, title="Family Status", loc="upper left", bbox_to_anchor=(1, 0, 0.5, 1))
         return fig
 
-    # Pie chart for Facebook
-    family_status_facebook = df_family_status[df_family_status['Facebook'] == 1]['FamilyStatus'].value_counts()
-    fig_pie1 = create_sorted_pie_chart(family_status_facebook, 'Facebook')
+    # Pie chart for the first selected app
+    family_status_app1 = df_family_status[df_family_status[app1] == 1]['FamilyStatus'].value_counts()
+    fig_pie1 = create_sorted_pie_chart(family_status_app1, app1)
 
-    # Pie chart for Instagram
-    family_status_instagram = df_family_status[df_family_status['Instagram'] == 1]['FamilyStatus'].value_counts()
-    fig_pie2 = create_sorted_pie_chart(family_status_instagram, 'Instagram')
+    # Pie chart for the second selected app
+    family_status_app2 = df_family_status[df_family_status[app2] == 1]['FamilyStatus'].value_counts()
+    fig_pie2 = create_sorted_pie_chart(family_status_app2, app2)
 
     # Display the pie charts side by side
     col1, col2 = st.columns(2)
